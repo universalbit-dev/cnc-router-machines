@@ -1,0 +1,11 @@
+DEVICE	Makefile	/^DEVICE     ?= atmega328p$/;"	m
+CLOCK	Makefile	/^CLOCK      = 16000000$/;"	m
+PROGRAMMER	Makefile	/^PROGRAMMER ?= -c avrisp2 -P usb$/;"	m
+SOURCE	Makefile	/^SOURCE    = main.c motion_control.c gcode.c spindle_control.c coolant_control.c serial.c \\$/;"	m
+BUILDDIR	Makefile	/^BUILDDIR = build$/;"	m
+SOURCEDIR	Makefile	/^SOURCEDIR = grbl$/;"	m
+FUSES	Makefile	/^FUSES      = -U hfuse:w:0xd2:m -U lfuse:w:0xff:m$/;"	m
+AVRDUDE	Makefile	/^AVRDUDE = avrdude $(PROGRAMMER) -p $(DEVICE) -B 10 -F$/;"	m
+COMPILE	Makefile	/^COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE) -I. -ffunction-sections -flto$/;"	m
+OBJECTS	Makefile	/^OBJECTS = $(addprefix $(BUILDDIR)\/,$(notdir $(SOURCE:.c=.o)))$/;"	m
+-format	Makefile	/^	avr-size --format=berkeley $(BUILDDIR)\/main.elf$/;"	m
