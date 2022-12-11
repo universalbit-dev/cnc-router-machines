@@ -1,5 +1,5 @@
-Simulate CNC : Arduino Nano Shield V3
-
+Simulate CNC : Arduino Nano Shield V3 [Exclude Stepper Motors]
+![CNC Simulator]()
 
 
 
