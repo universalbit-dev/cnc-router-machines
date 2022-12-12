@@ -1,4 +1,4 @@
 CNC 3040 Entry Level
 
 
-![alt text](image.jpg)
+![image](https://github.com/universalbit-dev/CNC-Router/blob/main/CNC%20Router/cnc3040/cnc3040.jpg)
