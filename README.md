@@ -8,4 +8,6 @@ Use a CNC router
 
 Upgrade to 3040:
 
-URL: https://www.sainsmart.com/blogs/news/cnc-3018-to-3040-upgrade-with-high-power-spindle-motor
+[CNC3040 UPGRADE](https://www.sainsmart.com/blogs/news/cnc-3018-to-3040-upgrade-with-high-power-spindle-motor)
+---
+[FabCity ABOUT](https://fab.city/about.html)
