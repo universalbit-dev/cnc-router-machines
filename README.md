@@ -1,11 +1,14 @@
-# CNC-Router 3018
+##### CNC-Router 3018
 ![once_again](https://github.com/universalbit-dev/CNC-Router/blob/main/cnc_3018/once_again.jpg "once again")
+
 ---
 
-#[CNC-JS](https://github.com/cncjs/cncjs)
+[CNC-JS](https://github.com/universalbit-dev/cncjs)
+
+---
 
 
-[CNC3040 UPGRADE](https://www.youtube.com/watch?v=an0JTNjjmwc)
+##### [CNC3040 UPGRADE](https://www.youtube.com/watch?v=an0JTNjjmwc)
 
 
 ### CNC3040 will use this pcb
