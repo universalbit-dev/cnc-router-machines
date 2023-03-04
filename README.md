@@ -11,7 +11,10 @@
 
 ![arduino](https://raw.githubusercontent.com/cncjs/cncjs/master/media/banner.png "Arduino")
 
+---
+
 #### [NCNC](https://www.youtube.com/watch?v=3AQfR8f9CSE&list=PLEhXwZnmfmZUFy7qmVqo_J2PuXGDBswYh&index=2)
+![ncnc](https://user-images.githubusercontent.com/73780835/98467809-6d9bfa00-21e8-11eb-9af5-916f1e96e305.gif "NCNC")
 
 ---
 
