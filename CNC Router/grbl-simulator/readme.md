@@ -1,7 +1,8 @@
 
 #Testing CNC Controller 
 
-Simulate CNC : Arduino Nano Shield V3 [Excluded Stepper Motors]
+Simulate CNC with Arduino Nano Shield V4 [Excluded Stepper Motors]
+[]
 
 
 ### Gcode Visualizer
@@ -13,9 +14,6 @@ Repository Clone:
 ``` 
 git clone https://github.com/universalbit-dev/cncjs
 ``` 
-
-
-
 
 #### Blender NCNC Addon: 
  * [blender-nCNC](https://github.com/BlenderCN-Org/blender-nCNC)
