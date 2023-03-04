@@ -5,7 +5,7 @@ Simulate CNC : Arduino Nano Shield V3 [Exclude Stepper Motors]
 
 Getting Started:  [CncJs](https://github.com/cncjs/cncjs#getting-started)
 
-CNCjs is a full-featured web-based interface for CNC controllers running Grbl, Marlin, Smoothieware, or TinyG.
+#### CNCjs is a full-featured web-based interface for CNC controllers running Grbl, Marlin, Smoothieware, or TinyG.
 
 Repository Clone:
 
