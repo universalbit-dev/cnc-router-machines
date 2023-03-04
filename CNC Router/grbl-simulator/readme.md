@@ -10,7 +10,7 @@ CNCjs is a full-featured web-based interface for CNC controllers running Grbl, M
 Repository Clone:
 
 ``` 
-git clone https://github.com/cncjs/cncjs.git
+git clone https://github.com/universalbit-dev/cncjs
 
 ``` 
 
