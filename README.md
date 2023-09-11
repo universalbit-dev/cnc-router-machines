@@ -5,7 +5,7 @@
 ##### CNC-Router 3018
 ---
 - [CNC-JS](https://github.com/universalbit-dev/cncjs)
-- [Puzzle CNC]()
+
 
 ![CNC_3018](https://github.com/universalbit-dev/CNC-Router/blob/main/img/2023-03-04%2001-54-35.png "Puzzle CNC")
 
