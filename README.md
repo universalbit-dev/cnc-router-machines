@@ -3,14 +3,14 @@
 
 #### Create a puzzle piece with cardboard
 
-* [CNCjs](https://cnc.js.org/)
-* [Docs](https://github.com/cncjs/cncjs/wiki/Introduction)
+
 ##### Table of Contents:
 * [Gimp Image Editor]()
 * [InkScaspe Gcodetools]()
 * [Arduino Shield and CNCJs]() (simulate cnc milling)
 * [Creating a puzzle piece using a basic 3018 cnc]()
-
+* [CNCjs](https://cnc.js.org/)
+* [Docs](https://github.com/cncjs/cncjs/wiki/Introduction)
 
 ...as soon as possible
 * [CNC3018 UPGRADE CNC3040](https://www.youtube.com/watch?v=an0JTNjjmwc)
