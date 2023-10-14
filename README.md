@@ -8,7 +8,7 @@
 * [Gimp Image Editor]()
 * [InkScaspe Gcodetools]()
 * [Arduino Shield and CNCJs]() (simulate cnc milling)
-* [Creating a puzzle piece using a basic 3018 cnc]()
+* [Creating a puzzle piece using basic 3018 cnc router machine]()
 * [CNCjs](https://cnc.js.org/)
 * [Docs](https://github.com/cncjs/cncjs/wiki/Introduction)
 
