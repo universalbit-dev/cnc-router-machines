@@ -2,7 +2,6 @@
 ##### [Bash Reference Manual](https://www.gnu.org/software/bash/manual/html_node/index.html)
 
 #### Create a puzzle piece with cardboard
-
 ##### Table of Contents:
 * [Gimp Image Editor]()
 * [InkScaspe Gcodetools]()
