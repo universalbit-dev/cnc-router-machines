@@ -14,19 +14,13 @@
 
 ...as soon as possible
 * [CNC3018 UPGRADE CNC3040](https://www.youtube.com/watch?v=an0JTNjjmwc)
-
 * pcb [arduino cnc shield v4](https://www.google.com/search?q=arduino+cnc+shield+v4&tbm=isch&ved=2ahUKEwiipKKJ16OBAxW18rsIHev_ANkQ2-cCegQIABAA&oq=arduino+cnc+shield+v4&gs_lcp=CgNpbWcQAzIECCMQJzIHCAAQExCABDIICAAQCBAeEBMyCAgAEAgQHhATMgYIABAeEBNQugdYjAlgjRRoAXAAeACAAfoDiAGmBZIBBzAuMS41LTGYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=jp7_ZKKlObXl7_UP6_-DyA0&bih=651&biw=1360&client=firefox-b-e&hl=it) ...compatible with esp32?
-
-
-  
-![CNC_3040](https://user-images.githubusercontent.com/10263751/44384613-5c208780-a4e2-11e8-87d2-1a384fa93c93.jpg "CNC 3040")
 
 
 * [Grbl v1.1 and ESP32?](https://github.com/bdring/Grbl_Esp32/issues/12)
 
+
 [Resources](https://github.com/bdring/Grbl_Esp32)
-
-
 ![GitHub Logo](https://github.com/gnea/gnea-Media/blob/master/Grbl%20Logo/Grbl%20Logo%20250px.png?raw=true)
 ***
 
