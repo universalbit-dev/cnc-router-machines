@@ -3,8 +3,8 @@ description: keep calm and make something of amazing
 logo: docs/assets/images/logo.png
 show_downloads: false
 google_analytics: G-MN27QKSXPR
-imagesurl: docs/assets/images/
-thumbsurl: docs/assets/thumbs/
+imagesurl: assets/images/
+thumbsurl: assets/thumbs/
 theme: jekyll-theme-minimal
 remote_theme: pages-themes/minimal@v0.2.0
 plugins:
