@@ -2,7 +2,7 @@ title: cnc-router-machines
 description: keep calm and make something of amazing
 logo: docs/assets/images/logo.png
 show_downloads: false
-google_analytics: G-MN27QKSXPR
+google_analytics: 
 imagesurl: assets/images/
 thumbsurl: assets/thumbs/
 theme: jekyll-theme-minimal
@@ -11,6 +11,7 @@ plugins:
 - jekyll-remote-theme
 - jekyll-seo-tag
 - jekyll-redirect-from
+- jekyll-coffeescript
 lsi: false
 safe: true
 incremental: false
