@@ -3,8 +3,8 @@
 
 #### Create a puzzle piece with cardboard
 ##### Table of Contents:
-* [Gimp Image Editor]()
-* [InkScaspe Gcodetools]()
+* [Gimp Image Editor](https://github.com/GNOME/gimp)
+* [InkScaspe Gcodetools](https://github.com/inkscape/inkscape)
 * [Arduino Shield and CNCJs]() (simulate cnc milling)
 * [Creating a puzzle piece using basic 3018 cnc router machine]()
 * [CNCjs](https://cnc.js.org/)
