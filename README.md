@@ -12,7 +12,6 @@
 * [Creating a puzzle piece using basic 3018 cnc router machine]()
 * [CNCjs](https://github.com/universalbit-dev/cncjs) - [Wiki](https://github.com/cncjs/cncjs/wiki/Introduction)
 * [CNC3018 UPGRADE CNC3040](https://www.youtube.com/watch?v=an0JTNjjmwc)
-* [Arduino ESP32 CNC Shield](https://www.google.com/search?q=arduino+cnc+shield+v4&tbm=isch&ved=2ahUKEwiipKKJ16OBAxW18rsIHev_ANkQ2-cCegQIABAA&oq=arduino+cnc+shield+v4&gs_lcp=CgNpbWcQAzIECCMQJzIHCAAQExCABDIICAAQCBAeEBMyCAgAEAgQHhATMgYIABAeEBNQugdYjAlgjRRoAXAAeACAAfoDiAGmBZIBBzAuMS41LTGYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=jp7_ZKKlObXl7_UP6_-DyA0&bih=651&biw=1360&client=firefox-b-e&hl=it)
 * [Grbl v1.1 and ESP32](https://github.com/bdring/Grbl_Esp32/issues/12)
 
 ---
