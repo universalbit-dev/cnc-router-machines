@@ -3,7 +3,6 @@
 * [G-Code](https://linuxcnc.org/docs/html/gcode/g-code.html)
 * [Bash Reference Manual](https://www.gnu.org/software/bash/manual/html_node/index.html)
 
-#### Create a puzzle piece with cardboard
 ##### Table of Contents:
 * [InkScaspe Gcodetools](https://github.com/inkscape/inkscape)
 * [InkScape LaserTools](https://github.com/ChrisWag91/Inkscape-Lasertools-Plugin)
