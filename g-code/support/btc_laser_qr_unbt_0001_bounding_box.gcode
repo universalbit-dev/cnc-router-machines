@@ -7,12 +7,12 @@ G21	;Programming in millimeters (mm)
 M03 S1 ;Activate laser and set power to 0 (CUSTOM)
 
 
-G0 X-0.28 Y0.25
+G0 X4.19 Y4.08
 S0.1 F1200
-G1 X260.72
-G1 Y261.25
-G1 X-0.28
-G1 Y0.25
+G1 X106.26
+G1 Y106.16
+G1 X4.19
+G1 Y4.08
 S1
 G00 X0 Y0
 
