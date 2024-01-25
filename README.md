@@ -3,6 +3,9 @@
 * [G-Code](https://linuxcnc.org/docs/html/gcode/g-code.html)
 * [Bash Reference Manual](https://www.gnu.org/software/bash/manual/html_node/index.html)
 
+<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/g-code/mandala/cncjs/mandala_cncjs.png" width="30%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/g-code/puzzle/cncjs/pzl_cnc_01.png" width="30%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/g-code/support/cncjs/support_unbt_cncjs_laser.png" width="30%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/g-code/trisquel/cncjs/trisquel_cncjs_laser.png" width="30%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/g-code/universalbit/cncjs/universalbit_cncjs.png" width="30%"></img>  
+
+
 ##### Table of Contents:
 * [InkScaspe Gcodetools](https://github.com/inkscape/inkscape)
 * [InkScape LaserTools](https://github.com/ChrisWag91/Inkscape-Lasertools-Plugin)
