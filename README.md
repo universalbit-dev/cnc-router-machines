@@ -8,7 +8,7 @@
 
 ##### Table of Contents:
 * [InkScaspe Gcodetools](https://github.com/inkscape/inkscape)
-* [InkScape LaserTools](https://github.com/ChrisWag91/Inkscape-Lasertools-Plugin
+* [InkScape LaserTools](https://github.com/ChrisWag91/Inkscape-Lasertools-Plugin)
 * [Arduino Shield V4 and CNCJs]() (upload gcode file and simulate cnc milling or laser engraving)
 * [G-Code Linux Cnc](https://linuxcnc.org/docs/html/gcode/g-code.html)
 * [CNCjs](https://github.com/universalbit-dev/cncjs) - [Wiki](https://github.com/cncjs/cncjs/wiki/Introduction)
