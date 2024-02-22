@@ -1,4 +1,3 @@
-
 ##### Mathematics for developer:
 
 * Gcode
