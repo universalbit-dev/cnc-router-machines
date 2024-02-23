@@ -12,6 +12,7 @@
 * [Arduino Shield V4 and CNCJs]() (upload gcode file and simulate cnc milling or laser engraving)
 * [G-Code Linux Cnc](https://linuxcnc.org/docs/html/gcode/g-code.html)
 * [CNCjs](https://github.com/universalbit-dev/cncjs) - [Wiki](https://github.com/cncjs/cncjs/wiki/Introduction)
+* [CNC3018 UPGRADE Z-AXIS](work in progress)
 * [CNC3018 UPGRADE CNC3040](https://www.youtube.com/watch?v=an0JTNjjmwc)
 * [Grbl v1.1 and ESP32](https://github.com/bdring/Grbl_Esp32/issues/12)
 * [MakerBase](https://github.com/makerbase-mks/MKS-DLC32)
