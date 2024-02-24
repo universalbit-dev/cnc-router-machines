@@ -7,7 +7,7 @@
 
 
 ##### Table of Contents:
- [Version 1.2.1](https://inkscape.org/de/release/inkscape-1.2.1)
+ [Version 1.3.2](https://inkscape.org/de/release/inkscape-1.3.2/)
 * [InkScaspe Gcodetools](https://github.com/inkscape/inkscape)
 * [InkScape LaserTools](https://github.com/ChrisWag91/Inkscape-Lasertools-Plugin)
 * [Arduino Shield V4 and CNCJs]() (upload gcode file and simulate cnc milling or laser engraving)
