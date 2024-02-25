@@ -24,5 +24,6 @@
 <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/ZRailBack.png" width="10%"></img> 
 <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_001.jpg" width="50%"></img> 
 
-
+#### By oomlout in [WorkshopCNC](https://www.instructables.com/How-to-Make-a-Three-Axis-CNC-Machine-Cheaply-and-/)
+[CC BY-SA 4.0]https://creativecommons.org/licenses/by-sa/4.0/
 
