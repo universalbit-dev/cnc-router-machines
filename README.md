@@ -11,16 +11,18 @@
 
 
 ##### Table of Contents:
- [Version 1.3.2](https://inkscape.org/de/release/inkscape-1.3.2/)
-* [InkScaspe Gcodetools](https://github.com/inkscape/inkscape)
-* [InkScape LaserTools](https://github.com/ChrisWag91/Inkscape-Lasertools-Plugin)
+ 
 * [Arduino Shield V4 and CNCJs]() (upload gcode file and simulate cnc milling or laser engraving)
-* [G-Code Linux Cnc](https://linuxcnc.org/docs/html/gcode/g-code.html)
 * [CNCjs](https://github.com/universalbit-dev/cncjs) - [Wiki](https://github.com/cncjs/cncjs/wiki/Introduction)
-* [CNC3018 UPGRADE Z-AXIS](work in progress)
-* [CNC3018 UPGRADE CNC3040](https://www.youtube.com/watch?v=an0JTNjjmwc)
-* [Grbl v1.1 and ESP32](https://github.com/bdring/Grbl_Esp32/issues/12)
+* [CNC3018 UPGRADE Z-AXIS]()
+* [Grbl v1.1 and ESP32](https://github.com/universalbit-dev/Grbl_Esp32)
 * [MakerBase](https://github.com/makerbase-mks/MKS-DLC32)
 ### Grbl v1.1 has been released [here](https://github.com/gnea/grbl/releases)!
+
+#### G-Code and Laser Tools:
+#### [Version 1.3.2](https://inkscape.org/de/release/inkscape-1.3.2/)
+
+* [InkScaspe Gcodetools](https://github.com/inkscape/inkscape)
+* [InkScape LaserTools](https://github.com/ChrisWag91/Inkscape-Lasertools-Plugin)
 
 
