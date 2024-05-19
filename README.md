@@ -15,7 +15,7 @@
 * [Arduino Shield V4 and CNCJs]() (upload gcode file and simulate cnc milling or laser engraving)
 * [CNCjs](https://github.com/universalbit-dev/cncjs) - [Wiki](https://github.com/cncjs/cncjs/wiki/Introduction)
 * [CNC3018 UPGRADE Z-AXIS]()
-* [Grbl v1.1 and ESP32](https://github.com/universalbit-dev/Grbl_Esp32) -- [Wiring](https://github.com/grbl/grbl/wiki/Connecting-Grbl)
+* [Grbl v1.1 and ESP32](https://github.com/universalbit-dev/Grbl_Esp32) -- [Wiring](https://github.com/grbl/grbl/wiki/Connecting-Grbl) -- [Fritzing Cnc-Router-Grbl](https://fritzing.org/projects/stepper-motor-with-drv8825-cnc-router-grbl)
 * [MakerBase](https://github.com/makerbase-mks/MKS-DLC32) -- [Wiring](https://github.com/makerbase-mks/MKS-DLC32/blob/main/MKS-DLC32-main/doc/DLC32%20wiring%20manual.pdf)
 * [RaspberryPi CNC](https://wiki.protoneer.co.nz/Raspberry_Pi_CNC)
 * 
