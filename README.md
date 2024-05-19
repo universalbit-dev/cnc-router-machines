@@ -16,7 +16,7 @@
 * [CNCjs](https://github.com/universalbit-dev/cncjs) - [Wiki](https://github.com/cncjs/cncjs/wiki/Introduction)
 * [CNC3018 UPGRADE Z-AXIS]()
 * [Grbl v1.1 and ESP32](https://github.com/universalbit-dev/Grbl_Esp32)
-* [MakerBase](https://github.com/makerbase-mks/MKS-DLC32)
+* [MakerBase](https://github.com/makerbase-mks/MKS-DLC32) -- [Wiring](https://github.com/makerbase-mks/MKS-DLC32/blob/main/MKS-DLC32-main/doc/DLC32%20wiring%20manual.pdf)
 * [RaspberryPi CNC](https://wiki.protoneer.co.nz/Raspberry_Pi_CNC)
 * 
 ### Grbl v1.1 has been released [here](https://github.com/gnea/grbl/releases)!
