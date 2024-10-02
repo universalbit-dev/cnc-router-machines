@@ -1,4 +1,4 @@
-##### Mathematics for developerS:
+##### Mathematics for developers:
 
 * [Gcode]()
 * [Laser Code]()
