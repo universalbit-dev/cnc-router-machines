@@ -1,33 +1,77 @@
-##### [Support UniversalBit Project](https://github.com/universalbit-dev/universalbit-dev/tree/main/support) -- [Disambiguation](https://en.wikipedia.org/wiki/Wikipedia:Disambiguation) -- [Bash Reference Manual](https://www.gnu.org/software/bash/manual/html_node/index.html) -- [Join Mastodon](https://mastodon.social/invite/wTHp2hSD) -- [Website](https://www.universalbit.it/) -- [Content Delivery Network](https://www.universalbitcdn.it/)
+# CNC Router Machines
 
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/wemos_d1_arduino/wemos_d1_arduino.png" width="9%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/wemos_d1_arduino/cnc_shield.png" width="9%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/arduino_nano_cnc_shield/arduino_nano.png" width="9%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/arduino_nano_cnc_shield/arduino_nano_cnc_shield.png" width="9%"></img>
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_001.jpg" width="10%"></img>
----
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_001.jpg" width="40%" ></img>
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/BeamCap-BeltHolder-ZCartHolder.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/BeltHolderBeamCap.png" width="10%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/BeltHolderBrace.png" width="10%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/CartEndLeft.png" width="10%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/Cart_Connector.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/Cart_Connector2.png" width="10%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/Cart_Connector3.png" width="10%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/Cart_EndRight.png" width="10%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/LeftCartInside.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/LeftCartOutside.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/MotorSpacer-YBlockHolder.png" width="10%"></img>
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/MotorSpacer-ZCartEndSpace.png" width="10%"></img> 
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/RightCartInside.png" width="10%"></img> 
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/RightCartOutside.png" width="10%"></img> 
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/XBearingBlockHolder.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/XCartCap.png" width="10%"></img>
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/XCartCap2.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/Z-RailRunner.png" width="10%"></img> 
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/Z-RailSpacer.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/ZCartEndNut-ZCartHolderB.png" width="5%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/ZCartEndSpace-ZCartEndNut.png" width="5%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/ZCartHolderA.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/ZRailBack.png" width="5%"></img> 
-##### Author: oomlout in [WorkShopCNC](https://www.instructables.com/How-to-Make-a-Three-Axis-CNC-Machine-Cheaply-and-/) [[CC BY-SA 4.0]](https://creativecommons.org/licenses/by-sa/4.0/)
+This repository provides resources, instructions, and tools for setting up and operating CNC router machines. It includes wiring guides, firmware installation, and G-code tools to help you get started with CNC projects.
 
-#### [CnCJS](https://github.com/cncjs/cncjs)
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/g-code/mandala/cncjs/mandala_cncjs.png" width="30%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/g-code/puzzle/cncjs/pzl_cnc_01.png" width="30%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/g-code/support/cncjs/support_unbt_cncjs_laser.png" width="30%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/g-code/trisquel/cncjs/trisquel_cncjs_laser.png" width="30%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/g-code/universalbit/cncjs/universalbit_cncjs.png" width="30%"></img>  
+![CNC Machine](https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_001.jpg)
 
 ---
 
-##### Table of Contents:
-* [Upload GRBL Firmware to arduino nano shield v3](https://github.com/universalbit-dev/universalbit-dev/tree/main/cnc)
-* [Wiring](https://github.com/grbl/grbl/wiki/Connecting-Grbl) -- [Fritzing Cnc-Router-Grbl](https://fritzing.org/projects/stepper-motor-with-drv8825-cnc-router-grbl)
-* [MakerBase](https://github.com/makerbase-mks/MKS-DLC32) -- [Wiring](https://github.com/makerbase-mks/MKS-DLC32/blob/main/MKS-DLC32-main/doc/DLC32%20wiring%20manual.pdf) -- [CNC and 3D Printer Compatibility](https://www.makerbase.store/blogs/how-to-use-octoprint-with-mks-pi-skipr/how-to-choose-your-board-1)
-* [RaspberryPi CNC](https://wiki.protoneer.co.nz/Raspberry_Pi_CNC)
+## Table of Contents
+1. [Overview](#overview)
+2. [Getting Started](#getting-started)
+   - [Upload GRBL Firmware](#upload-grbl-firmware)
+   - [Wiring Guides](#wiring-guides)
+3. [G-Code Tools](#g-code-tools)
+4. [Additional Resources](#additional-resources)
+5. [Author and License](#author-and-license)
 
-### Grbl v1.1 has been released [here](https://github.com/gnea/grbl/releases)!
-
-#### G-Code and Laser Tool: -- [inkscape Version 1.3.2](https://inkscape.org/de/release/inkscape-1.3.2/)
-* [InkScaspe Gcodetools](https://github.com/inkscape/inkscape)
-* [InkScape LaserTools](https://github.com/ChrisWag91/Inkscape-Lasertools-Plugin)
 ---
 
+## Overview
+
+This repository features a detailed guide for building and managing CNC router machines. With support for GRBL firmware and tools like InkScape, it's tailored for hobbyists and makers aiming to create efficient and cost-effective CNC setups.
+
+Supported Features:
+- Firmware installation for Arduino Nano Shield v3.
+- Wiring diagrams for CNC routers and 3D printers.
+- G-code generation and laser tools.
+- Compatibility with CNCjs for machine control.
+
+![CNCjs Example](https://github.com/universalbit-dev/cnc-router-machines/blob/main/g-code/mandala/cncjs/mandala_cncjs.png)
+
+---
+
+## Getting Started
+
+### Upload GRBL Firmware
+
+To upload GRBL firmware to an Arduino Nano Shield v3, follow the guide provided in the [UniversalBit Project CNC Section](https://github.com/universalbit-dev/universalbit-dev/tree/main/cnc).
+
+#### GRBL Firmware Release
+- **Version**: [Grbl v1.1](https://github.com/gnea/grbl/releases)
+
+### Wiring Guides
+
+For connecting components, refer to the following resources:
+- [GRBL Wiring Guide](https://github.com/grbl/grbl/wiki/Connecting-Grbl)
+- [Fritzing CNC-Router-Grbl Project](https://fritzing.org/projects/stepper-motor-with-drv8825-cnc-router-grbl)
+- [MakerBase MKS-DLC32 Wiring Manual](https://github.com/makerbase-mks/MKS-DLC32/blob/main/MKS-DLC32-main/doc/DLC32%20wiring%20manual.pdf)
+- [Raspberry Pi CNC](https://wiki.protoneer.co.nz/Raspberry_Pi_CNC)
+
+---
+
+## G-Code Tools
+
+Generate and manage G-code for CNC and laser cutting using the following tools:
+- [InkScape Version 1.3.2](https://inkscape.org/de/release/inkscape-1.3.2/)
+- [InkScape Gcodetools](https://github.com/inkscape/inkscape)
+- [InkScape LaserTools Plugin](https://github.com/ChrisWag91/Inkscape-Lasertools-Plugin)
+
+---
+
+## Additional Resources
+
+Explore more about CNC router machines and their applications:
+- [CNCjs](https://github.com/cncjs/cncjs): A web-based interface for CNC controllers.
+- [MakerBase MKS-DLC32](https://github.com/makerbase-mks/MKS-DLC32)
+- [UniversalBit Project Support](https://github.com/universalbit-dev/universalbit-dev/tree/main/support)
+
+---
+
+## Author and License
+
+Original CNC router machine designs and guides by [oomlout](https://www.instructables.com/How-to-Make-a-Three-Axis-CNC-Machine-Cheaply-and-/), shared under the [CC BY-SA 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/).
+
+![CNC Components](https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/BeamCap-BeltHolder-ZCartHolder.png)
+
+---
