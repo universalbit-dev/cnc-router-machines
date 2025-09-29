@@ -2,7 +2,7 @@
 
 This repository provides resources, instructions, and tools for setting up and operating CNC router machines. It includes wiring guides, firmware installation, and G-code tools to help you get started with CNC projects.
 
-![CNC Machine](https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_001.jpg)
+![CNC Machine](https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/universalbit_cnc_project.png)
 
 ---
 
