@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# universalbit_cnc_flasher.sh
+# universalbit_grbl_flasher.sh
 # Master Edition - AVR + ESP32 + ESP8266 (build + flash)
 #
 # Sources:
