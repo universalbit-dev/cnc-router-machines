@@ -1,4 +1,6 @@
-
+![Arduino Uno Tested](https://img.shields.io/badge/Arduino_Uno-Tested-blue?style=flat-square&logo=arduino)
+![Arduino Nano Tested](https://img.shields.io/badge/Arduino_Nano-Tested-blue?style=flat-square&logo=arduino)
+![ESP32 Compatible](https://img.shields.io/badge/ESP32-Compatible-orange?style=flat-square&logo=espressif)
 # UniversalBit CNC Project
 This repository provides resources, instructions, and tools for setting up and operating CNC router machines. It includes wiring guides, firmware installation, and G-code tools to help you get started with CNC projects.
 
