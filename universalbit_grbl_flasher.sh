@@ -13,6 +13,17 @@
 #   - Build from source via PlatformIO for ESP32/ESP8266
 #   - Flash prebuilt binaries via --bin
 #   - Safe guardrails against common cross-chip mistakes
+#Arduino
+#sudo ./universalbit_grbl_flasher.sh --chip avr --yes
+
+#ESP8266
+#sudo ./universalbit_grbl_flasher.sh --chip esp8266 --build-esp8266-from-source --yes
+#sudo ./universalbit_grbl_flasher.sh --chip esp8266 --bin "$HOME/grblesp/.pio/build/esp12e/firmware.bin" --yes
+
+#ESP32
+#sudo esptool --chip esp32 --no-stub --port /dev/ttyUSB0 erase_flash
+#sudo esptool --chip esp32 --no-stub --port /dev/ttyUSB0 --baud 115200 write_flash --flash_mode dio --flash_size detect 0x0 "$HOME/Grbl_Esp32/.pio/build/release/firmware.bin"
+
 # ==============================================================================
 
 set -Eeuo pipefail
