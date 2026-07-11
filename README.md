@@ -1,4 +1,3 @@
-[![Hardware Tested: WeMos D1 R2](https://img.shields.io/badge/Hardware%20Tested-WeMos%20D1%20R2-brightgreen?style=for-the-badge&logo=espressif&logoColor=white)](https://github.com/universalbit-dev/universalbit-dev/tree/main/cnc)
 
 # UniversalBit CNC Project
 This repository provides resources, instructions, and tools for setting up and operating CNC router machines. It includes wiring guides, firmware installation, and G-code tools to help you get started with CNC projects.
