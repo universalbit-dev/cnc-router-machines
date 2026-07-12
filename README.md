@@ -168,48 +168,6 @@ sudo esptool --chip esp32 --no-stub --port /dev/ttyUSB0 --baud 115200 \
 
 ---
 
-## ⚠️ Troubleshooting
-
-### A) Deprecation warnings in `esptool`
-
-If you see warnings like:
-- `erase_flash` deprecated
-- `write_flash` deprecated
-- `--flash_mode` deprecated
-- `--flash_size` deprecated
-
-Use hyphen versions:
-
-- `erase-flash`
-- `write-flash`
-- `--flash-mode`
-- `--flash-size`
-
----
-
-### B) Build succeeded, flash command fails with malformed path
-
-Cause: script captured build logs into firmware path variable.
-
-Fix:
-- ensure `build_with_pio()` logs to `stderr`
-- keep only firmware path on `stdout`
-
-(Already addressed in the latest script refinement.)
-
----
-
-### C) Connected in CNCjs but motors do not move
-
-Check:
-- stepper drivers powered
-- STEP/DIR/EN wiring
-- shared GND between controller and drivers
-- no alarm lock (`$X`, `$H`, `?`)
-- motor PSU present and stable
-
----
-
 ## 🔌 Hardware Wiring Guides
 
 - [GRBL Wiring (Official)](https://github.com/grbl/grbl/wiki/Connecting-Grbl)
