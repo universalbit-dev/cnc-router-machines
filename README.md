@@ -47,11 +47,17 @@ To boot the CNCjs production server engine running quietly in the background as 
 
 ```bash
 ./unbt_cncjs.sh --start
-
 ```
 
+### 🌐 Accessing the Interface
+
+Depending on how your network environment is configured, you can access the CNCjs workspace via two pathways:
 > 💡 *Once started, open your web browser and navigate directly to: **`http://localhost:8000`** (or your machine's local network IP).*
 
+* **🔒 Secure HTTPS Mode (Recommended):** If you are running Nginx or Apache2 using the generated configuration templates from this script, navigate securely to port `8443`:
+  ```text
+  https://localhost:8443/#/workspace
+  ```
 ### 🔹 Step 3: Stop or Restart the Server Environment
 
 If you need to drop active socket states, clear interface terminal locks, or power down the system framework completely:
