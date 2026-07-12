@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/env bash
 # ==============================================================================
 # universalbit_grbl_flasher.sh
 # Master Edition - AVR + ESP32 + ESP8266 (build + flash)
@@ -7,24 +7,6 @@
 #   AVR      -> gnea/grbl
 #   ESP32    -> bdring/Grbl_Esp32
 #   ESP8266  -> gcobos/grblesp
-#
-# Key features:
-#   - Auto chip detect (esp32 / esp8266 / fallback avr)
-#   - Build from source via PlatformIO for ESP32/ESP8266
-#   - Flash prebuilt binaries via --bin
-#   - Safe guardrails against common cross-chip mistakes
-#
-# Example commands:
-#   # Arduino (Uno/Nano)
-#   sudo ./universalbit_grbl_flasher.sh --chip avr --yes
-#
-#   # ESP8266
-#   sudo ./universalbit_grbl_flasher.sh --chip esp8266 --build-esp8266-from-source --yes
-#   sudo ./universalbit_grbl_flasher.sh --chip esp8266 --bin "$HOME/grblesp/.pio/build/esp12e/firmware.bin" --yes
-#
-#   # ESP32
-#   sudo ./universalbit_grbl_flasher.sh --chip esp32 --build-esp32-from-source --esp32-repo-dir "$HOME/Grbl_Esp32" --yes
-#   sudo ./universalbit_grbl_flasher.sh --chip esp32 --bin "$HOME/Grbl_Esp32/.pio/build/release/firmware.bin" --yes
 # ==============================================================================
 
 set -Eeuo pipefail
@@ -110,19 +92,6 @@ AVR:
 
 Other:
   -h, --help
-
-Examples:
-  # ESP8266 build+flash from source
-  sudo ./${SCRIPT_NAME} --chip esp8266 --build-esp8266-from-source --esp8266-repo-dir "\$HOME/grblesp" --yes
-
-  # ESP8266 flash existing bin
-  sudo ./${SCRIPT_NAME} --chip esp8266 --bin "\$HOME/grblesp/.pio/build/<env>/firmware.bin" --yes
-
-  # ESP32 build+flash from source
-  sudo ./${SCRIPT_NAME} --chip esp32 --build-esp32-from-source --esp32-repo-dir "\$HOME/Grbl_Esp32" --yes
-
-  # AVR flash (Nano/Uno)
-  sudo ./${SCRIPT_NAME} --chip avr --port /dev/ttyUSB0 --yes
 EOF
 }
 
@@ -188,8 +157,13 @@ ensure_dialout_group() {
 
 ensure_platformio_for_user() {
   local u="${SUDO_USER:-$USER}"
+  local h
+  h="$(eval echo "~${u}")"
 
-  if sudo -u "$u" -H bash -lc 'command -v pio >/dev/null 2>&1'; then
+  # Append path inline dynamically for active root environment parsing context checks
+  export PATH="$PATH:${h}/.local/bin"
+
+  if sudo -u "$u" -H bash -lc "export PATH=\$PATH:${h}/.local/bin; command -v pio >/dev/null 2>&1"; then
     log "PlatformIO found for user ${u}."
     return
   fi
@@ -201,7 +175,7 @@ ensure_platformio_for_user() {
   sudo -u "$u" -H bash -lc 'pipx ensurepath || true'
   sudo -u "$u" -H bash -lc 'pipx install platformio || pipx upgrade platformio || true'
 
-  if ! sudo -u "$u" -H bash -lc 'command -v pio >/dev/null 2>&1'; then
+  if ! sudo -u "$u" -H bash -lc "export PATH=\$PATH:${h}/.local/bin; command -v pio >/dev/null 2>&1"; then
     die "pio still unavailable for ${u}. Open a new shell and retry."
   fi
 }
@@ -239,6 +213,8 @@ ensure_git_repo() {
 build_with_pio() {
   local repo_dir="$1" pio_env="${2:-}"
   local u="${SUDO_USER:-$USER}"
+  local h
+  h="$(eval echo "~${u}")"
   local build_dir cmd fw
 
   repo_dir="$(expand_path_for_user "$repo_dir")"
@@ -254,9 +230,8 @@ build_with_pio() {
   cmd="pio run"
   [[ -n "$pio_env" ]] && cmd="pio run -e ${pio_env}"
 
-  # IMPORTANT: logs/build output go to stderr so stdout returns only firmware path
   echo -e "${GREEN}[INFO]${NC} Building with PlatformIO in ${build_dir}" >&2
-  sudo -u "$u" -H bash -lc "cd '${build_dir}' && ${cmd}" >&2
+  sudo -u "$u" -H bash -lc "export PATH=\$PATH:${h}/.local/bin; cd '${build_dir}' && ${cmd}" >&2
 
   if [[ -n "$pio_env" && -f "${build_dir}/.pio/build/${pio_env}/firmware.bin" ]]; then
     fw="${build_dir}/.pio/build/${pio_env}/firmware.bin"
@@ -272,7 +247,6 @@ validate_bin_for_chip() {
   local chip="$1" bin="$2"
   [[ -f "$bin" ]] || die "Binary not found: $bin"
 
-  # Guard against common user mixups by path hints
   if [[ "$chip" == "esp8266" && "$bin" == *"Grbl_Esp32"* ]]; then
     die "Refusing to flash ESP32 artifact on ESP8266 target: $bin"
   fi
@@ -281,18 +255,21 @@ validate_bin_for_chip() {
 # ------------------------------ Flash flows -----------------------------------
 flash_esp32() {
   local bin_file=""
+  local build_dir=""
   local rel_url="https://github.com/bdring/Grbl_Esp32/releases/download/${GRBL_ESP32_TAG}/${GRBL_ESP32_REL_ASSET}"
 
   if [[ -n "$USER_BIN" ]]; then
     USER_BIN="$(expand_path_for_user "$USER_BIN")"
     [[ -f "$USER_BIN" ]] || die "--bin not found: $USER_BIN"
     bin_file="$USER_BIN"
+    build_dir="$(dirname "$bin_file")"
   elif [[ "$BUILD_ESP32_FROM_SOURCE" == "true" ]]; then
     ensure_platformio_for_user
     ensure_git_repo "$ESP32_REPO_DIR" "$ESP32_GIT_URL" "$ESP32_GIT_REF"
     bin_file="$(build_with_pio "$ESP32_REPO_DIR" "$ESP32_PIO_ENV")"
     [[ -f "$bin_file" ]] || die "Resolved firmware path is invalid: $bin_file"
     log "Built ESP32 firmware: $bin_file"
+    build_dir="$(dirname "$bin_file")"
   else
     bin_file="$GRBL_ESP32_LOCAL"
     if [[ ! -f "$bin_file" ]]; then
@@ -303,12 +280,24 @@ flash_esp32() {
 
   [[ -f "$bin_file" ]] || die "Firmware file not found: $bin_file"
 
-  log "Erasing ESP32..."
-  esptool --chip esp32 --port "$PORT" erase_flash
+  # Modernized command syntax update to clear core deprecation logs
+  log "Erasing ESP32 storage matrix completely..."
+  esptool --chip esp32 --port "$PORT" erase-flash
 
-  log "Flashing ESP32 firmware: $bin_file"
-  esptool --chip esp32 --port "$PORT" --baud "$BAUD_ESP" \
-    write_flash --flash_mode dio --flash_size detect 0x0 "$bin_file"
+  # Enhanced check step to automatically flash partition blocks and clear boot loops
+  if [[ -n "$build_dir" && -f "${build_dir}/bootloader.bin" && -f "${build_dir}/partitions.bin" ]]; then
+    log "🚀 Multi-file structure detected. Deploying offset layout targets..."
+    esptool --chip esp32 --port "$PORT" --baud "$BAUD_ESP" \
+      --before default_reset --after hard_reset write-flash \
+      0x1000 "${build_dir}/bootloader.bin" \
+      0x8000 "${build_dir}/partitions.bin" \
+      0x10000 "$bin_file"
+  else
+    warn "⚠️ Core boot partitions missing. Falling back to single binary direct map..."
+    log "Flashing ESP32 firmware: $bin_file"
+    esptool --chip esp32 --port "$PORT" --baud "$BAUD_ESP" \
+      write-flash --flash-mode dio --flash-size detect 0x0 "$bin_file"
+  fi
 }
 
 flash_esp8266() {
@@ -327,7 +316,7 @@ flash_esp8266() {
     log "Built ESP8266 firmware: $bin_file"
   else
     log "Erasing ESP8266..."
-    esptool --chip esp8266 --port "$PORT" erase_flash
+    esptool --chip esp8266 --port "$PORT" erase-flash
     warn "No --bin and no --build-esp8266-from-source provided. Erase-only complete."
     return
   fi
@@ -335,11 +324,11 @@ flash_esp8266() {
   [[ -f "$bin_file" ]] || die "Firmware file not found: $bin_file"
 
   log "Erasing ESP8266..."
-  esptool --chip esp8266 --port "$PORT" erase_flash
+  esptool --chip esp8266 --port "$PORT" erase-flash
 
   log "Flashing ESP8266 firmware: $bin_file"
   esptool --chip esp8266 --port "$PORT" --baud "$BAUD_ESP" \
-    write_flash --flash_mode dio --flash_size detect 0x0 "$bin_file"
+    write-flash --flash-mode dio --flash-size detect 0x0 "$bin_file"
 }
 
 flash_avr() {
@@ -410,7 +399,6 @@ selected_chip="$detected_chip"
 
 log "Port: $PORT | detected chip: $detected_chip | selected flow: $selected_chip"
 
-# Cross-chip safety
 if [[ "$selected_chip" == "esp32" && "$detected_chip" == "esp8266" ]]; then
   die "Detected ESP8266 on ${PORT}, but --chip esp32 was requested."
 fi
