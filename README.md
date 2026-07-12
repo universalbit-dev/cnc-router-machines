@@ -114,22 +114,19 @@ Alternatively, if you already have a compiled binary snapshot file ready, point 
 sudo ./universalbit_grbl_flasher.sh --chip esp8266 --bin "$HOME/grblesp/.pio/build/esp12e/firmware.bin" --yes
 
 ```
+### 🔹 ESP32 Controllers (Native Manual Execution)
+Because the ESP32 chip family features a multi-tiered structural partition layout, you can use `esptool` to manage deployment seamlessly.
 
-### 🔹 ESP32 Controllers
-
-Because the ESP32 chip family features a multi-tiered structural partition layout, you can bypass standard tools and use `esptool` directly.
-
-First, execute a deep physical storage wipe on the chip's internal sector memory:
-
+First, execute a deep physical storage wipe on the chip's internal sector memory (allowing the default ram stub to handle flash instructions):
 ```bash
-sudo esptool --chip esp32 --no-stub --port /dev/ttyUSB0 erase_flash
+sudo esptool --chip esp32 --port /dev/ttyUSB0 erase_flash
 
 ```
 
 Next, burn your locally compiled PlatformIO custom release binary directly into the root execution address space (`0x0`):
 
 ```bash
-sudo esptool --chip esp32 --no-stub --port /dev/ttyUSB0 --baud 115200 \
+sudo esptool --chip esp32 --port /dev/ttyUSB0 --baud 115200 \
   write_flash --flash_mode dio --flash_size detect 0x0 "$HOME/Grbl_Esp32/.pio/build/release/firmware.bin"
 
 ```
