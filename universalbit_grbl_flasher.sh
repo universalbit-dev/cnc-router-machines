@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 # ==============================================================================
 # universalbit_grbl_flasher.sh
 # Master Edition - AVR + ESP32 + ESP8266 (build + flash)
@@ -160,7 +160,6 @@ ensure_platformio_for_user() {
   local h
   h="$(eval echo "~${u}")"
 
-  # Append path inline dynamically for active root environment parsing context checks
   export PATH="$PATH:${h}/.local/bin"
 
   if sudo -u "$u" -H bash -lc "export PATH=\$PATH:${h}/.local/bin; command -v pio >/dev/null 2>&1"; then
@@ -280,20 +279,29 @@ flash_esp32() {
 
   [[ -f "$bin_file" ]] || die "Firmware file not found: $bin_file"
 
-  # Modernized command syntax update to clear core deprecation logs
+  # Fallback logic: If boot files are missing, extract them from the local toolchain packages path cache
+  if [[ -n "$build_dir" && (! -f "${build_dir}/bootloader.bin" || ! -f "${build_dir}/partitions.bin") ]]; then
+    local pio_sdk="${REAL_HOME}/.platformio/packages/framework-arduinoespressif32/tools/sdk/bin"
+    if [[ -d "$pio_sdk" ]]; then
+      log "📦 Extracting standard SDK partition and boot blocks from core toolchain package cache..."
+      [[ ! -f "${build_dir}/bootloader.bin" ]] && cp "$pio_sdk/bootloader_qio_80m.bin" "${build_dir}/bootloader.bin" || true
+      [[ ! -f "${build_dir}/partitions.bin" ]] && cp "$pio_sdk/partitions_singleapp.bin" "${build_dir}/partitions.bin" || true
+    fi
+  fi
+
   log "Erasing ESP32 storage matrix completely..."
   esptool --chip esp32 --port "$PORT" erase-flash
 
-  # Enhanced check step to automatically flash partition blocks and clear boot loops
+  # Enhanced block write routine containing structural target offsets to completely fix the boot loops
   if [[ -n "$build_dir" && -f "${build_dir}/bootloader.bin" && -f "${build_dir}/partitions.bin" ]]; then
-    log "🚀 Multi-file structure detected. Deploying offset layout targets..."
+    log "🚀 Multi-file structure detected. Deploying structural firmware package offsets..."
     esptool --chip esp32 --port "$PORT" --baud "$BAUD_ESP" \
       --before default_reset --after hard_reset write-flash \
       0x1000 "${build_dir}/bootloader.bin" \
       0x8000 "${build_dir}/partitions.bin" \
       0x10000 "$bin_file"
   else
-    warn "⚠️ Core boot partitions missing. Falling back to single binary direct map..."
+    warn "⚠️ Core partition assets missing in path. Falling back to direct single-binary mapping..."
     log "Flashing ESP32 firmware: $bin_file"
     esptool --chip esp32 --port "$PORT" --baud "$BAUD_ESP" \
       write-flash --flash-mode dio --flash-size detect 0x0 "$bin_file"
