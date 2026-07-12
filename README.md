@@ -130,6 +130,21 @@ sudo esptool --chip esp32 --port /dev/ttyUSB0 --baud 115200 \
   write_flash --flash_mode dio --flash_size detect 0x0 "$HOME/Grbl_Esp32/.pio/build/release/firmware.bin"
 
 ```
+### ⚠️ Troubleshooting: Fix Missing Stub Flasher Error
+
+If your initial flash attempt fails with an error like:
+`FileNotFoundError: [Errno 2] No such file or directory: '.../stub_flasher_32.json'`
+
+This is caused by a known packaging bug in the default Ubuntu/Debian APT repository version of `esptool`. The system package manager leaves out the required RAM helper databases.
+
+**The Fix:** Remove the broken system package and install the complete production build directly via Python's package installer:
+```bash
+# 1. Purge the broken APT installation
+sudo apt remove -y esptool
+
+# 2. Install the latest official bundle globally
+sudo pip3 install --break-system-packages esptool
+```
 
 To upload GRBL firmware to an Arduino Nano Shield v3, follow the guide provided in the **[UniversalBit Project CNC Section](https://github.com/universalbit-dev/universalbit-dev/tree/main/cnc)**.
 
