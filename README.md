@@ -82,8 +82,27 @@ http://localhost:8000/#/workspace
 ./unbt_cncjs.sh --logs
 ```
 
----
+## 🛡️ Troubleshooting: Permission Denied on Serial Port (`/dev/ttyUSB0`)
 
+If your background simulator daemon log throws a `Permission denied, cannot open /dev/ttyUSB0` error, the process engine does not have clearance to access the serial hardware.
+
+### Secure Fix: Propagate Linux Group Permissions
+
+Run the following commands to permanently add your active user account to the system hardware access group and force your background processes to reload their environment profiles:
+
+```bash
+# 1. Add your dynamic user account to the serial dialout group
+sudo usermod -aG dialout $USER
+# 2. Stop your active CNCjs instance session
+./unbt_cncjs.sh --stop
+# 3. Kill your background process manager engine to completely drop old permission locks
+pm2 kill || true
+# 4. Restart the runtime control engine under your updated profile layout
+./unbt_cncjs.sh --start
+
+```
+
+---
 ## 🚀 Firmware Deployment Usage
 
 Main tool:
