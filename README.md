@@ -1,6 +1,6 @@
-![Arduino Uno Tested](https://img.shields.io/badge/Arduino_Uno-Tested-blue?style=flat-square&logo=arduino)
-![Arduino Nano Tested](https://img.shields.io/badge/Arduino_Nano-Tested-blue?style=flat-square&logo=arduino)
-![ESP8266 Tested](https://img.shields.io/badge/ESP8266-Tested-brightgreen?style=flat-square&logo=espressif)
+![Arduino Uno Compatible](https://img.shields.io/badge/Arduino_Uno-Compatible-lightgrey?style=flat-square&logo=arduino)
+![Arduino Nano Compatible](https://img.shields.io/badge/Arduino_Nano-Compatible-lightgrey?style=flat-square&logo=arduino)
+![ESP8266 Compatible](https://img.shields.io/badge/ESP8266-Compatible-lightgrey?style=flat-square&logo=espressif)
 ![ESP32 Tested](https://img.shields.io/badge/ESP32-Tested-brightgreen?style=flat-square&logo=espressif)
 ![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
 
