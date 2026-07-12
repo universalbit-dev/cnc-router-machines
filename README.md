@@ -2,201 +2,216 @@
 ![Arduino Nano Tested](https://img.shields.io/badge/Arduino_Nano-Tested-blue?style=flat-square&logo=arduino)
 ![ESP8266 Tested](https://img.shields.io/badge/ESP8266-Tested-brightgreen?style=flat-square&logo=espressif)
 ![ESP32 Tested](https://img.shields.io/badge/ESP32-Tested-brightgreen?style=flat-square&logo=espressif)
+![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
+
 # UniversalBit CNC Project
-This repository provides resources, instructions, and tools for setting up and operating CNC router machines. It includes wiring guides, firmware installation, and G-code tools to help you get started with CNC projects.
+
+UniversalBit CNC is a practical toolkit for building, flashing, and operating GRBL-based CNC systems across **AVR (Uno/Nano)**, **ESP8266**, and **ESP32** platforms.
+
+It includes:
+- CNCjs setup automation
+- Unified firmware flashing workflows
+- Hardware wiring references
+- G-code toolchain resources
 
 ![CNC Machine](https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/universalbit_cnc_project.png)
 
 ---
 
-## Table of Contents
-1. [Overview](#overview)
-2. [Getting Started](#getting-started)
-   - [Upload GRBL Firmware](#upload-grbl-firmware)
-   - [Wiring Guides](#wiring-guides)
-3. [G-Code Tools](#g-code-tools)
-4. [Additional Resources](#additional-resources)
-5. [Author and License](#author-and-license)
+## 📌 Table of Contents
+
+1. [Overview](#-overview)
+2. [CNCjs Web Interface Controller](#️-cncjs-web-interface-controller)
+3. [Firmware Deployment Usage](#-firmware-deployment-usage)
+4. [Troubleshooting](#️-troubleshooting)
+5. [Hardware Wiring Guides](#-hardware-wiring-guides)
+6. [G-Code Generation Tools](#️-g-code-generation-tools)
+7. [Additional Resources](#-additional-resources)
+8. [Author and License](#-author-and-license)
 
 ---
 
-## Overview
+## 🔍 Overview
 
-This repository features a detailed guide for building and managing CNC router machines. With support for GRBL firmware and tools like InkScape, it's tailored for hobbyists and makers aiming to create efficient and cost-effective CNC setups.
+This repository provides an end-to-end CNC workflow for makers and workshop automation:
 
-Supported Features:
-- Firmware installation.
-- Wiring diagrams for CNC routers and 3D printers.
-- G-code generation and laser tools.
-- Compatibility with CNCjs for machine control.
+- ⚡ **Multi-target flashing**: AVR, ESP8266, ESP32
+- 🖥️ **Web control stack**: CNCjs installation and daemon control
+- 🔌 **Wiring knowledge base**: official + practical references
+- 🛠️ **Design-to-machine pipeline**: vector tools and G-code plugins
+
+---
 
 ## 🖥️ CNCjs Web Interface Controller
 
-The `unbt_cncjs.sh` script automates the installation, daemon management, and execution of the CNCjs web-based interface tool ecosystem. It provides a clean terminal control stack to spin up the server environment on your local thin client or single-board computer (like a Raspberry Pi).
+The `unbt_cncjs.sh` script manages CNCjs installation and lifecycle operations.
 
-### 🔹 Step 1: Initialize First-Time Deployment
-To automatically check system dependencies (Node.js/NPM), pull down the core packages, and configure local firewall exceptions:
+### 1) Install and provision
+
 ```bash
-./unbt_cncjs.sh --install
-
+sudo ./unbt_cncjs.sh --install
 ```
 
-### 🔹 Step 2: Spin Up the Controller Stack
-
-To boot the CNCjs production server engine running quietly in the background as a localized persistent service process:
+### 2) Start CNCjs daemon
 
 ```bash
 ./unbt_cncjs.sh --start
 ```
 
-### 🌐 Accessing the Interface
+### 3) Open workspace
 
-Depending on how your network environment is configured, you can access the CNCjs workspace via two pathways:
-> 💡 *Once started, open your web browser and navigate directly to: **`http://localhost:8000`** (or your machine's local network IP).*
+```text
+https://localhost:8443/#/workspace
+```
 
-* **🔒 Secure HTTPS Mode (Recommended):** If you are running Nginx or Apache2 using the generated configuration templates from this script, navigate securely to port `8443`:
-  ```text
-  https://localhost:8443/#/workspace
-  ```
-### 🔹 Step 3: Stop or Restart the Server Environment
+or direct local mode:
 
-If you need to drop active socket states, clear interface terminal locks, or power down the system framework completely:
+```text
+http://localhost:8000/#/workspace
+```
+
+### 4) Stop / restart / logs
 
 ```bash
-# To safely stop the server daemon process
 ./unbt_cncjs.sh --stop
-
-# To forcefully reboot the communication socket framework
 ./unbt_cncjs.sh --restart
-
-```
-
-### 🔹 Step 4: Live Log Inspection
-
-To read real-time traffic outputs, monitor active serial mapping protocols, or debug data handshake issues between CNCjs and your microcontrollers:
-
-```bash
 ./unbt_cncjs.sh --logs
-
 ```
 
-![CNCjs Example](https://github.com/universalbit-dev/cnc-router-machines/blob/main/g-code/mandala/cncjs/mandala_cncjs.png)
-
 ---
 
-## Getting Started
-
-### Upload GRBL Firmware:
----
 ## 🚀 Firmware Deployment Usage
 
-Use the utility script to flash your targeted microcontroller architecture automatically. Ensure your device is connected via USB and powered ON.
+Use:
 
-### 🔹 Arduino Uno / Nano (AVR Architecture)
-To flash the pre-compiled standard AVR `.hex` engine directly onto an Arduino layout:
+`universalbit_grbl_flasher.sh`
+
+Ensure the board is connected, powered, and visible as a serial device before flashing.
+
+---
+
+### 🔹 Arduino Uno / Nano (AVR)
+
 ```bash
+# Auto-detect serial port
 sudo ./universalbit_grbl_flasher.sh --chip avr --yes
 
+# Explicit serial port
+sudo ./universalbit_grbl_flasher.sh --chip avr --port /dev/ttyUSB0 --yes
 ```
+
+---
 
 ### 🔹 ESP8266
 
-To automatically compile the ESP8266 controller firmware locally from the available source files:
-
 ```bash
+# Build from source + flash
 sudo ./universalbit_grbl_flasher.sh --chip esp8266 --build-esp8266-from-source --yes
 
-```
-
-Alternatively, if you already have a compiled binary snapshot file ready, point the script directly to its local path payload:
-
-```bash
+# Reflash existing binary
 sudo ./universalbit_grbl_flasher.sh --chip esp8266 --bin "$HOME/grblesp/.pio/build/esp12e/firmware.bin" --yes
-
 ```
-### 🔹 ESP32 Controllers (Native Manual Execution)
-Because the ESP32 chip family features a multi-tiered structural partition layout, you can use `esptool` to manage deployment seamlessly.
 
-First, execute a deep physical storage wipe on the chip's internal sector memory (allowing the default ram stub to handle flash instructions):
+---
+
+### 🔹 ESP32 (script flow)
+
 ```bash
+# Build from source + flash
+sudo ./universalbit_grbl_flasher.sh --chip esp32 --build-esp32-from-source --yes
+
+# Reflash existing binary (if supported by your current script revision)
+sudo ./universalbit_grbl_flasher.sh --chip esp32 --bin "$HOME/Grbl_Esp32/.pio/build/release/firmware.bin" --yes
+```
+
+---
+
+### 🔹 ESP32 (manual esptool flow)
+
+```bash
+# Erase flash
 sudo esptool --chip esp32 --port /dev/ttyUSB0 erase_flash
 
+# Flash bootloader + partitions + firmware
+sudo esptool --chip esp32 --port /dev/ttyUSB0 --baud 115200 --before default_reset --after hard_reset write_flash \
+  0x1000  "$HOME/Grbl_Esp32/.pio/build/release/bootloader.bin" \
+  0x8000  "$HOME/Grbl_Esp32/.pio/build/release/partitions.bin" \
+  0x10000 "$HOME/Grbl_Esp32/.pio/build/release/firmware.bin"
 ```
 
-Next, burn your locally compiled PlatformIO custom release binary directly into the root execution address space (`0x0`):
+---
+
+## ⚠️ Troubleshooting
+
+### A) Missing `stub_flasher_32.json`
+
+If you get:
+
+`FileNotFoundError: .../stub_flasher_32.json`
+
+your distro `esptool` package may be incomplete.
+
+#### Recommended fix
 
 ```bash
-sudo esptool --chip esp32 --port /dev/ttyUSB0 --baud 115200 \
-  write_flash --flash_mode dio --flash_size detect 0x0 "$HOME/Grbl_Esp32/.pio/build/release/firmware.bin"
-
-```
-### ⚠️ Troubleshooting: Fix Missing Stub Flasher Error
-
-If your initial flash attempt fails with an error like:
-`FileNotFoundError: [Errno 2] No such file or directory: '.../stub_flasher_32.json'`
-
-This is caused by a known packaging bug in the default Ubuntu/Debian APT repository version of `esptool`. The system package manager leaves out the required RAM helper databases.
-
-**The Fix:** Remove the broken system package and install the complete production build directly via Python's package installer:
-```bash
-# 1. Purge the broken APT installation
 sudo apt remove -y esptool
-
-# 2. Install the latest official bundle globally
-sudo pip3 install --break-system-packages esptool
+python3 -m pip install --user --upgrade esptool
+~/.local/bin/esptool version
 ```
 
-To upload GRBL firmware to an Arduino Nano Shield v3, follow the guide provided in the **[UniversalBit Project CNC Section](https://github.com/universalbit-dev/universalbit-dev/tree/main/cnc)**.
+Then run `~/.local/bin/esptool ...` or add `~/.local/bin` to your `PATH`.
 
-#### GRBL Firmware Release
-- **Version**: [Grbl v1.1](https://github.com/gnea/grbl/releases)
+#### Workaround (`--no-stub`)
 
+```bash
+sudo esptool --chip esp32 --no-stub --port /dev/ttyUSB0 erase_flash
+sudo esptool --chip esp32 --no-stub --port /dev/ttyUSB0 --baud 115200 \
+  write_flash --flash_mode dio --flash_size detect 0x0 "$HOME/Grbl_Esp32/.pio/build/release/firmware.bin"
+```
 
-### Wiring Guides
+### B) Connected but no physical motion
 
-For connecting components, refer to the following resources:
-- [GRBL Wiring Guide](https://github.com/grbl/grbl/wiki/Connecting-Grbl)
-- [Fritzing CNC-Router-Grbl Project](https://fritzing.org/projects/stepper-motor-with-drv8825-cnc-router-grbl)
-- [MakerBase MKS-DLC32 Wiring Manual](https://github.com/makerbase-mks/MKS-DLC32/blob/main/MKS-DLC32-main/doc/DLC32%20wiring%20manual.pdf)
-- [Raspberry Pi CNC](https://wiki.protoneer.co.nz/Raspberry_Pi_CNC)
-
----
-
-## G-Code Tools
-
-Generate and manage G-code for CNC and laser cutting using the following tools:
-- [InkScape Version 1.3.2](https://inkscape.org/de/release/inkscape-1.3.2/)
-- [InkScape Gcodetools](https://github.com/inkscape/inkscape)
-- [InkScape LaserTools Plugin](https://github.com/ChrisWag91/Inkscape-Lasertools-Plugin)
+If UI connects but motors do not move:
+- verify stepper drivers are connected and powered
+- verify common GND between controller and drivers
+- verify ENABLE/STEP/DIR wiring
+- check alarm/lock state (`$X`, `$H`, `?`)
+- confirm motor power supply is present
 
 ---
 
-## Additional Resources
+## 🔌 Hardware Wiring Guides
 
-Explore more about CNC router machines and their applications:
-- [CNCjs](https://github.com/cncjs/cncjs): A web-based interface for CNC controllers.
-- [MakerBase MKS-DLC32](https://github.com/makerbase-mks/MKS-DLC32)
----
-
-### CNC Components Gallery:
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/wemos_d1_arduino/wemos_d1_arduino.png" width="9%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/wemos_d1_arduino/cnc_shield.png" width="9%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/arduino_nano_cnc_shield/arduino_nano.png" width="9%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/arduino_nano_cnc_shield/arduino_nano_cnc_shield.png" width="9%"></img>
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_001.jpg" width="10%"></img>
----
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_001.jpg" width="40%" ></img>
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/BeamCap-BeltHolder-ZCartHolder.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/BeltHolderBeamCap.png" width="10%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/BeltHolderBrace.png" width="10%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/CartEndLeft.png" width="10%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/Cart_Connector.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/Cart_Connector2.png" width="10%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/Cart_Connector3.png" width="10%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/Cart_EndRight.png" width="10%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/LeftCartInside.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/LeftCartOutside.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/MotorSpacer-YBlockHolder.png" width="10%"></img>
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/MotorSpacer-ZCartEndSpace.png" width="10%"></img> 
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/RightCartInside.png" width="10%"></img> 
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/RightCartOutside.png" width="10%"></img> 
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/XBearingBlockHolder.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/XCartCap.png" width="10%"></img>
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/XCartCap2.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/Z-RailRunner.png" width="10%"></img> 
-<img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/Z-RailSpacer.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/ZCartEndNut-ZCartHolderB.png" width="5%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/ZCartEndSpace-ZCartEndNut.png" width="5%"></img> <img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/ZCartHolderA.png" width="10%"></img><img src="https://github.com/universalbit-dev/cnc-router-machines/blob/main/cnc/cnc_a4/ZRailBack.png" width="5%"></img> 
-##### Author and License
-Original CNC router machine component,parts,designs and guides by [oomlout](https://www.instructables.com/How-to-Make-a-Three-Axis-CNC-Machine-Cheaply-and-/), shared under the [CC BY-SA 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/).
+- [GRBL Wiring (Official)](https://github.com/grbl/grbl/wiki/Connecting-Grbl)
+- [DRV8825 CNC Wiring Example (Fritzing)](https://fritzing.org/projects/stepper-motor-with-drv8825-cnc-router-grbl)
+- [MKS-DLC32 Wiring Manual (PDF)](https://github.com/makerbase-mks/MKS-DLC32/blob/main/MKS-DLC32-main/doc/DLC32%20wiring%20manual.pdf)
+- [Raspberry Pi CNC Hat Guide](https://wiki.protoneer.co.nz/Raspberry_Pi_CNC)
 
 ---
 
-## 📢 Support the UniversalBit Project
-Help us grow and continue innovating!  
-- [Support the UniversalBit Project](https://github.com/universalbit-dev/universalbit-dev/tree/main/support)  
-- [Learn about Disambiguation](https://en.wikipedia.org/wiki/Wikipedia:Disambiguation)  
-- [Bash Reference Manual](https://www.gnu.org/software/bash/manual/)
+## 🛠️ G-Code Generation Tools
+
+- [Inkscape](https://inkscape.org/)
+- [Inkscape Repository](https://github.com/inkscape/inkscape)
+- [Inkscape Lasertools Plugin](https://github.com/ChrisWag91/Inkscape-Lasertools-Plugin)
+
+---
+
+## 📦 Additional Resources
+
+- [CNCjs](https://github.com/cncjs/cncjs)
+- [MKS-DLC32 Repository](https://github.com/makerbase-mks/MKS-DLC32)
+- [GRBL Releases](https://github.com/gnea/grbl/releases)
+
+---
+
+## 📜 Author and License
+
+Created and maintained by **[universalbit-dev](https://github.com/universalbit-dev)**.  
+Licensed under the **[GNU General Public License v3.0 (GPL-3.0)](https://www.gnu.org/licenses/gpl-3.0.en.html)**.
+
+---
+
+## 🤝 Support
+
+If this project helps your CNC workflow, consider starring the repository and sharing it with others in the maker/CNC community.
