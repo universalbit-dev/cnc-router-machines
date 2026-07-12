@@ -6,13 +6,17 @@
 
 # UniversalBit CNC Project
 
-UniversalBit CNC is a practical toolkit for building, flashing, and operating GRBL-based CNC systems across **AVR (Uno/Nano)**, **ESP8266**, and **ESP32** platforms.
+UniversalBit CNC is a practical toolkit for flashing, configuring, and operating GRBL-based CNC systems on:
+
+- **AVR** (Arduino Uno / Nano)
+- **ESP8266**
+- **ESP32**
 
 It includes:
-- CNCjs setup automation
-- Unified firmware flashing workflows
-- Hardware wiring references
-- G-code toolchain resources
+- Unified firmware flasher script
+- CNCjs deployment helper
+- Wiring and toolchain references
+- Real-world flash workflows
 
 ![CNC Machine](https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/universalbit_cnc_project.png)
 
@@ -33,44 +37,44 @@ It includes:
 
 ## 🔍 Overview
 
-This repository provides an end-to-end CNC workflow for makers and workshop automation:
+This repository provides an end-to-end CNC workflow:
 
-- ⚡ **Multi-target flashing**: AVR, ESP8266, ESP32
-- 🖥️ **Web control stack**: CNCjs installation and daemon control
-- 🔌 **Wiring knowledge base**: official + practical references
-- 🛠️ **Design-to-machine pipeline**: vector tools and G-code plugins
+- ⚡ Flash GRBL firmware for AVR / ESP8266 / ESP32
+- 🖥️ Run CNCjs for machine control
+- 🔌 Follow tested wiring references
+- 🛠️ Generate G-code from vector designs
 
 ---
 
 ## 🖥️ CNCjs Web Interface Controller
 
-The `unbt_cncjs.sh` script manages CNCjs installation and lifecycle operations.
+Use `unbt_cncjs.sh` to install and manage CNCjs.
 
-### 1) Install and provision
+### Install / Provision
 
 ```bash
 sudo ./unbt_cncjs.sh --install
 ```
 
-### 2) Start CNCjs daemon
+### Start
 
 ```bash
 ./unbt_cncjs.sh --start
 ```
 
-### 3) Open workspace
+### Open Workspace
 
 ```text
 https://localhost:8443/#/workspace
 ```
 
-or direct local mode:
+or direct mode:
 
 ```text
 http://localhost:8000/#/workspace
 ```
 
-### 4) Stop / restart / logs
+### Stop / Restart / Logs
 
 ```bash
 ./unbt_cncjs.sh --stop
@@ -82,11 +86,14 @@ http://localhost:8000/#/workspace
 
 ## 🚀 Firmware Deployment Usage
 
-Use:
+Main tool:
 
 `universalbit_grbl_flasher.sh`
 
-Ensure the board is connected, powered, and visible as a serial device before flashing.
+Before flashing:
+- connect board via USB
+- ensure board has power
+- confirm serial port exists (`/dev/ttyUSB*` or `/dev/ttyACM*`)
 
 ---
 
@@ -108,19 +115,21 @@ sudo ./universalbit_grbl_flasher.sh --chip avr --port /dev/ttyUSB0 --yes
 # Build from source + flash
 sudo ./universalbit_grbl_flasher.sh --chip esp8266 --build-esp8266-from-source --yes
 
-# Reflash existing binary
+# Flash existing binary
 sudo ./universalbit_grbl_flasher.sh --chip esp8266 --bin "$HOME/grblesp/.pio/build/esp12e/firmware.bin" --yes
 ```
 
 ---
 
-### 🔹 ESP32 (script flow)
+### 🔹 ESP32 (recommended script flow)
+
+This is the recommended and tested flow.
 
 ```bash
 # Build from source + flash
-sudo ./universalbit_grbl_flasher.sh --chip esp32 --build-esp32-from-source --yes
+sudo ./universalbit_grbl_flasher.sh --chip esp32 --build-esp32-from-source --esp32-repo-dir "$HOME/Grbl_Esp32" --yes
 
-# Reflash existing binary (if supported by your current script revision)
+# Flash existing binary
 sudo ./universalbit_grbl_flasher.sh --chip esp32 --bin "$HOME/Grbl_Esp32/.pio/build/release/firmware.bin" --yes
 ```
 
@@ -128,62 +137,83 @@ sudo ./universalbit_grbl_flasher.sh --chip esp32 --bin "$HOME/Grbl_Esp32/.pio/bu
 
 ### 🔹 ESP32 (manual esptool flow)
 
-```bash
-# Erase flash
-sudo esptool --chip esp32 --port /dev/ttyUSB0 erase_flash
+If you flash manually, build first:
 
-# Flash bootloader + partitions + firmware
-sudo esptool --chip esp32 --port /dev/ttyUSB0 --baud 115200 --before default_reset --after hard_reset write_flash \
-  0x1000  "$HOME/Grbl_Esp32/.pio/build/release/bootloader.bin" \
-  0x8000  "$HOME/Grbl_Esp32/.pio/build/release/partitions.bin" \
-  0x10000 "$HOME/Grbl_Esp32/.pio/build/release/firmware.bin"
+```bash
+cd "$HOME/Grbl_Esp32"
+pio run -e release
 ```
+
+Then flash with modern `esptool` syntax:
+
+```bash
+sudo esptool --chip esp32 --port /dev/ttyUSB0 erase-flash
+sudo esptool --chip esp32 --port /dev/ttyUSB0 --baud 115200 \
+  write-flash --flash-mode dio --flash-size detect 0x0 "$HOME/Grbl_Esp32/.pio/build/release/firmware.bin"
+```
+
+---
+
+### 🔹 ESP32 ROM fallback (`--no-stub`)
+
+Use this only when stub mode is unavailable on your environment.
+
+```bash
+sudo esptool --chip esp32 --no-stub --port /dev/ttyUSB0 --baud 115200 \
+  write-flash --flash-mode dio --flash-size detect 0x0 "$HOME/Grbl_Esp32/.pio/build/release/firmware.bin"
+```
+
+> Note: In `--no-stub` mode, `erase-flash` may fail on some ESP32 ROM loaders.  
+> `write-flash` already erases the target range it writes.
 
 ---
 
 ## ⚠️ Troubleshooting
 
-### A) Missing `stub_flasher_32.json`
+### A) Deprecation warnings in `esptool`
 
-If you get:
+If you see warnings like:
+- `erase_flash` deprecated
+- `write_flash` deprecated
+- `--flash_mode` deprecated
+- `--flash_size` deprecated
 
-`FileNotFoundError: .../stub_flasher_32.json`
+Use hyphen versions:
 
-your distro `esptool` package may be incomplete.
+- `erase-flash`
+- `write-flash`
+- `--flash-mode`
+- `--flash-size`
 
-#### Recommended fix
+---
 
-```bash
-sudo apt remove -y esptool
-python3 -m pip install --user --upgrade esptool
-~/.local/bin/esptool version
-```
+### B) Build succeeded, flash command fails with malformed path
 
-Then run `~/.local/bin/esptool ...` or add `~/.local/bin` to your `PATH`.
+Cause: script captured build logs into firmware path variable.
 
-#### Workaround (`--no-stub`)
+Fix:
+- ensure `build_with_pio()` logs to `stderr`
+- keep only firmware path on `stdout`
 
-```bash
-sudo esptool --chip esp32 --no-stub --port /dev/ttyUSB0 erase_flash
-sudo esptool --chip esp32 --no-stub --port /dev/ttyUSB0 --baud 115200 \
-  write_flash --flash_mode dio --flash_size detect 0x0 "$HOME/Grbl_Esp32/.pio/build/release/firmware.bin"
-```
+(Already addressed in the latest script refinement.)
 
-### B) Connected but no physical motion
+---
 
-If UI connects but motors do not move:
-- verify stepper drivers are connected and powered
-- verify common GND between controller and drivers
-- verify ENABLE/STEP/DIR wiring
-- check alarm/lock state (`$X`, `$H`, `?`)
-- confirm motor power supply is present
+### C) Connected in CNCjs but motors do not move
+
+Check:
+- stepper drivers powered
+- STEP/DIR/EN wiring
+- shared GND between controller and drivers
+- no alarm lock (`$X`, `$H`, `?`)
+- motor PSU present and stable
 
 ---
 
 ## 🔌 Hardware Wiring Guides
 
 - [GRBL Wiring (Official)](https://github.com/grbl/grbl/wiki/Connecting-Grbl)
-- [DRV8825 CNC Wiring Example (Fritzing)](https://fritzing.org/projects/stepper-motor-with-drv8825-cnc-router-grbl)
+- [DRV8825 CNC Example (Fritzing)](https://fritzing.org/projects/stepper-motor-with-drv8825-cnc-router-grbl)
 - [MKS-DLC32 Wiring Manual (PDF)](https://github.com/makerbase-mks/MKS-DLC32/blob/main/MKS-DLC32-main/doc/DLC32%20wiring%20manual.pdf)
 - [Raspberry Pi CNC Hat Guide](https://wiki.protoneer.co.nz/Raspberry_Pi_CNC)
 
@@ -202,6 +232,8 @@ If UI connects but motors do not move:
 - [CNCjs](https://github.com/cncjs/cncjs)
 - [MKS-DLC32 Repository](https://github.com/makerbase-mks/MKS-DLC32)
 - [GRBL Releases](https://github.com/gnea/grbl/releases)
+- [Grbl_Esp32](https://github.com/bdring/Grbl_Esp32)
+- [grblesp (ESP8266)](https://github.com/gcobos/grblesp)
 
 ---
 
@@ -214,4 +246,4 @@ Licensed under the **[GNU General Public License v3.0 (GPL-3.0)](https://www.gnu
 
 ## 🤝 Support
 
-If this project helps your CNC workflow, consider starring the repository and sharing it with others in the maker/CNC community.
+If this project helps your CNC workflow, please consider starring the repository and sharing it with the CNC/maker community.
