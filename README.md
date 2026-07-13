@@ -129,7 +129,7 @@ sudo ./universalbit_grbl_flasher.sh --chip avr --port /dev/ttyUSB0 --yes
 ---
 
 ### 🔹 ESP8266
-# Build + flash (recommended)
+## Build + flash (recommended)
 ```
 sudo ./universalbit_grbl_flasher.sh \
   --chip esp8266 \
@@ -139,7 +139,7 @@ sudo ./universalbit_grbl_flasher.sh \
   --yes
 ```
 
-# Flash existing binary (same env artifact)
+## Flash existing binary (same env artifact)
 ```
 sudo ./universalbit_grbl_flasher.sh \
   --chip esp8266 \
