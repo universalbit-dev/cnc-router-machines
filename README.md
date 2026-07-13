@@ -129,13 +129,23 @@ sudo ./universalbit_grbl_flasher.sh --chip avr --port /dev/ttyUSB0 --yes
 ---
 
 ### 🔹 ESP8266
+# Build + flash (recommended)
+```
+sudo ./universalbit_grbl_flasher.sh \
+  --chip esp8266 \
+  --build-esp8266-from-source \
+  --esp8266-pio-env esp12e \
+  --port /dev/ttyUSB0 \
+  --yes
+```
 
-```bash
-# Build from source + flash
-sudo ./universalbit_grbl_flasher.sh --chip esp8266 --build-esp8266-from-source --yes
-
-# Flash existing binary
-sudo ./universalbit_grbl_flasher.sh --chip esp8266 --bin "$HOME/grblesp/.pio/build/esp12e/firmware.bin" --yes
+# Flash existing binary (same env artifact)
+```
+sudo ./universalbit_grbl_flasher.sh \
+  --chip esp8266 \
+  --bin "$HOME/grblesp/.pio/build/esp12e/firmware.bin" \
+  --port /dev/ttyUSB0 \
+  --yes
 ```
 
 ---
