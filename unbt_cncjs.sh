@@ -2,9 +2,18 @@
 # ==============================================================================
 # Repository: universalbit-dev/cnc-router-machines
 # Module: unbt_cncjs.sh
-# Version: Pure Node.js 22 LTS - Nginx Safe Coexistence Profile
-# Description: Automated headless installation with graceful termination, PM2
-#              lifecycle setups, UFW isolation, and uncollidable Nginx proxying.
+# Version: Hardened Node.js + CNCjs + PM2 + Nginx (localhost TLS proxy)
+# Description:
+#   - Installs/updates Node.js 22, cncjs, pm2, nginx
+#   - Resets stale PM2 daemon state safely
+#   - Creates local self-signed TLS certs (if missing)
+#   - Runs CNCjs on 127.0.0.1:8000
+#   - Proxies HTTPS on 8443 via Nginx
+#   - Applies optional UFW rules (if ufw is installed)
+#
+# NOTE:
+#   - This script intentionally contains no hardcoded personal/sensitive data.
+#   - Replace defaults via env vars if needed.
 # ==============================================================================
 
 set -euo pipefail
@@ -14,109 +23,135 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-echo -e "${GREEN}=== [UniversalBit CNC Lab] Enforcing Node 22 LTS, PM2 & Nginx Proxy ===${NC}"
+echo -e "${GREEN}=== [UniversalBit CNC] CNCjs + PM2 + Nginx secure localhost profile ===${NC}"
 
-# 1. Root Enforcement Boundary Check
-if [[ $EUID -ne 0 ]]; then
-   echo -e "${RED}Error: This deployment script must be executed via sudo or root context.${NC}"
-   exit 1
+# ------------------------------------------------------------------------------
+# Configurable defaults (override with environment variables)
+# ------------------------------------------------------------------------------
+NODE_MAJOR="${NODE_MAJOR:-22}"
+INTERNAL_PORT="${INTERNAL_PORT:-8000}"
+PUBLIC_TLS_PORT="${PUBLIC_TLS_PORT:-8443}"
+CNCJS_HOST="${CNCJS_HOST:-127.0.0.1}"
+CERT_CN="${CERT_CN:-localhost}"
+
+APP_NAME="${APP_NAME:-unbt-cnc}"
+REAL_USER="${SUDO_USER:-$USER}"
+USER_HOME="$(eval echo "~$REAL_USER")"
+
+CNCJS_CONFIG_DIR="${CNCJS_CONFIG_DIR:-$USER_HOME/.cncjs}"
+CONFIG_JSON="${CONFIG_JSON:-$CNCJS_CONFIG_DIR/cncjs.json}"
+CERT_FILE="${CERT_FILE:-$CNCJS_CONFIG_DIR/server.crt}"
+KEY_FILE="${KEY_FILE:-$CNCJS_CONFIG_DIR/server.key}"
+
+# ------------------------------------------------------------------------------
+# Root enforcement
+# ------------------------------------------------------------------------------
+if [[ "${EUID}" -ne 0 ]]; then
+  echo -e "${RED}Error: run this script with sudo/root.${NC}"
+  exit 1
 fi
 
-# 2. Preventative Package Manager Lock Cleanup
-echo -e "${YELLOW}--> Cleaning up any stale package manager locks...${NC}"
-killall apt apt-get dpkg npm 2>/dev/null || true
-dpkg --configure -a
+# ------------------------------------------------------------------------------
+# Basic dependencies
+# ------------------------------------------------------------------------------
+echo -e "${YELLOW}--> Installing required packages...${NC}"
+apt-get update -y
+apt-get install -y curl ca-certificates gnupg lsb-release build-essential nginx openssl
 
-# 3. Force Upgrade to Node.js 22 LTS System-Wide
-echo -e "${YELLOW}--> Configuring official repositories for Node.js 22 LTS...${NC}"
+# ------------------------------------------------------------------------------
+# Node.js repo + install
+# ------------------------------------------------------------------------------
+echo -e "${YELLOW}--> Configuring NodeSource Node.js ${NODE_MAJOR}.x...${NC}"
 rm -f /etc/apt/sources.list.d/nodesource.list
-curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
-apt-get install -y nodejs build-essential nginx
+curl -fsSL "https://deb.nodesource.com/setup_${NODE_MAJOR}.x" | bash -
+apt-get install -y nodejs
 
-# 4. Install Headless CNCjs & PM2 via Global NPM Registry
-echo -e "${YELLOW}--> Installing headless CNCjs and PM2 ecosystem package tools...${NC}"
-npm install -g cncjs pm2@latest --quiet
+# ------------------------------------------------------------------------------
+# Global npm tools
+# ------------------------------------------------------------------------------
+echo -e "${YELLOW}--> Installing global npm tools (cncjs, pm2)...${NC}"
+npm install -g pm2@latest cncjs
 
-# 5. Graceful Shutdown & Rogue Socket Reclaimer (Prevents EADDRINUSE crashes)
-echo -e "${YELLOW}--> Optimizing network port states and purging active locks...${NC}"
-INTERNAL_PORT=8000
-REAL_USER=${SUDO_USER:-$USER}
-USER_HOME=$(eval echo "~$REAL_USER")
+# ------------------------------------------------------------------------------
+# PM2 cleanup/mismatch guard (for target user)
+# ------------------------------------------------------------------------------
+echo -e "${YELLOW}--> Resetting PM2 runtime state for user '${REAL_USER}'...${NC}"
+sudo -u "${REAL_USER}" PM2_HOME="${USER_HOME}/.pm2" pm2 kill || true
+rm -rf "${USER_HOME}/.pm2"
+mkdir -p "${USER_HOME}/.pm2"
+chown -R "${REAL_USER}:${REAL_USER}" "${USER_HOME}/.pm2"
 
-sudo -u "$REAL_USER" PM2_HOME="$USER_HOME/.pm2" pm2 delete unbt-cncjs-simulator 2>/dev/null || true
-if ss -tlnp | grep -q ":${INTERNAL_PORT} "; then
-    PID_HOLDING_PORT=$(ss -tlnp | grep ":${INTERNAL_PORT} " | awk '{print $6}' | cut -d, -f2 || echo "")
-    PID_CLEAN=$(echo "$PID_HOLDING_PORT" | grep -oE '[0-9]+' | head -n1 || echo "")
-    if [ ! -z "$PID_CLEAN" ]; then
-        kill -15 "$PID_CLEAN" 2>/dev/null || true
-        sleep 2
-    fi
-fi
-if ss -tlnp | grep -q ":${INTERNAL_PORT} "; then
-    killall -9 node cncjs 2>/dev/null || true
-    sleep 1
-fi
+# ------------------------------------------------------------------------------
+# CNCjs config dir + TLS certs
+# ------------------------------------------------------------------------------
+echo -e "${YELLOW}--> Preparing CNCjs config and TLS material...${NC}"
+mkdir -p "${CNCJS_CONFIG_DIR}"
 
-# 6. Base Configuration Directory and Cryptographic Certificate Initialization
-CNCJS_CONFIG_DIR="$USER_HOME/.cncjs"
-mkdir -p "$CNCJS_CONFIG_DIR"
-CERT_FILE="$CNCJS_CONFIG_DIR/server.crt"
-KEY_FILE="$CNCJS_CONFIG_DIR/server.key"
-
-if [[ -f "$CERT_FILE" && -f "$KEY_FILE" ]]; then
-    echo -e "${GREEN}✓ Cryptographic keys detected.${NC}"
+if [[ ! -f "${CERT_FILE}" || ! -f "${KEY_FILE}" ]]; then
+  echo -e "${YELLOW}--> Generating self-signed certificate (${CERT_CN})...${NC}"
+  openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout "${KEY_FILE}" \
+    -out "${CERT_FILE}" \
+    -subj "/CN=${CERT_CN}"
 else
-    echo -e "${YELLOW}⚠ Generating local fallback SSL keys...${NC}"
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-      -keyout "$KEY_FILE" \
-      -out "$CERT_FILE" \
-      -subj "/CN=universalbit.local"
+  echo -e "${GREEN}✓ Existing TLS certificate/key found.${NC}"
 fi
-chown -R "$REAL_USER:$REAL_USER" "$CNCJS_CONFIG_DIR"
-chmod 600 "$KEY_FILE"
-chmod 644 "$CERT_FILE"
 
-# 7. Write CNCjs JSON Config (Listen locally on localhost loopback)
-CONFIG_JSON="$CNCJS_CONFIG_DIR/cncjs.json"
-cat <<EOF > "$CONFIG_JSON"
+chown -R "${REAL_USER}:${REAL_USER}" "${CNCJS_CONFIG_DIR}"
+chmod 600 "${KEY_FILE}"
+chmod 644 "${CERT_FILE}"
+
+# ------------------------------------------------------------------------------
+# Write CNCjs JSON config (localhost only)
+# ------------------------------------------------------------------------------
+echo -e "${YELLOW}--> Writing CNCjs config: ${CONFIG_JSON}${NC}"
+cat > "${CONFIG_JSON}" <<EOF
 {
   "port": ${INTERNAL_PORT},
-  "host": "127.0.0.1",
+  "host": "${CNCJS_HOST}",
   "allowRemoteAccess": false
 }
 EOF
-chown "$REAL_USER:$REAL_USER" "$CONFIG_JSON"
-chmod 644 "$CONFIG_JSON"
+chown "${REAL_USER}:${REAL_USER}" "${CONFIG_JSON}"
+chmod 644 "${CONFIG_JSON}"
 
-# 8. Network Firewall Isolation (Open Port 8443 / Block Port 8000)
-echo -e "${YELLOW}--> Hardening firewall routing parameters via UFW...${NC}"
-if command -v ufw &> /dev/null; then
-    ufw deny 8000/tcp comment 'Block Direct Unencrypted CNCjs Access' || true
-    ufw allow 8443/tcp comment 'UniversalBit CNCjs Secure Proxy' || true
-    ufw reload
+# ------------------------------------------------------------------------------
+# Optional firewall rules
+# ------------------------------------------------------------------------------
+if command -v ufw >/dev/null 2>&1; then
+  echo -e "${YELLOW}--> Applying UFW rules...${NC}"
+  ufw deny "${INTERNAL_PORT}/tcp" comment 'Block direct CNCjs HTTP (loopback only intended)' || true
+  ufw allow "${PUBLIC_TLS_PORT}/tcp" comment 'Allow CNCjs TLS proxy' || true
+  ufw reload || true
 fi
 
-# 9. Deploy and Activate Nginx Proxy (Bypasses Apache Port Overlap crashes)
-echo -e "${YELLOW}--> Deploying and activating Nginx Reverse Proxy configuration on port 8443...${NC}"
-# Disable the default site if it overlaps
+# ------------------------------------------------------------------------------
+# Nginx reverse proxy (HTTPS :8443 -> http://127.0.0.1:8000)
+# ------------------------------------------------------------------------------
+echo -e "${YELLOW}--> Configuring Nginx reverse proxy on ${PUBLIC_TLS_PORT}...${NC}"
 rm -f /etc/nginx/sites-enabled/default
 
-cat <<EOF > /etc/nginx/sites-available/unbt-cncjs
+NGINX_SITE="/etc/nginx/sites-available/${APP_NAME}"
+cat > "${NGINX_SITE}" <<EOF
 server {
-    listen 8443 ssl;
+    listen ${PUBLIC_TLS_PORT} ssl;
     server_name _;
 
-    ssl_certificate $CERT_FILE;
-    ssl_certificate_key $KEY_FILE;
+    ssl_certificate ${CERT_FILE};
+    ssl_certificate_key ${KEY_FILE};
+
+    # Minimal sane TLS defaults
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
 
     location / {
-        proxy_pass http://127.0.0.1:${INTERNAL_PORT};
+        proxy_pass http://${CNCJS_HOST}:${INTERNAL_PORT};
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto \$scheme;
 
-        # WebSockets Upgrade Engine for continuous toolpath updates
+        # WebSocket support
         proxy_http_version 1.1;
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection "upgrade";
@@ -127,18 +162,35 @@ server {
 }
 EOF
 
-ln -sf /etc/nginx/sites-available/unbt-cncjs /etc/nginx/sites-enabled/
+ln -sf "${NGINX_SITE}" "/etc/nginx/sites-enabled/${APP_NAME}"
+nginx -t
 systemctl restart nginx
-echo -e "${GREEN}✓ Nginx reverse proxy routing configuration is active!${NC}"
+systemctl enable nginx >/dev/null 2>&1 || true
+echo -e "${GREEN}✓ Nginx proxy active.${NC}"
 
-# 10. Start Service via PM2
-echo -e "${YELLOW}--> Starting CNCjs daemon wrapper inside PM2 lifecycle...${NC}"
-sudo -u "$REAL_USER" PM2_HOME="$USER_HOME/.pm2" pm2 start cncjs \
-  --name "unbt-cncjs-simulator" \
-  -- --config "$CONFIG_JSON"
+# ------------------------------------------------------------------------------
+# Start CNCjs via PM2 (single app, stable name)
+# ------------------------------------------------------------------------------
+echo -e "${YELLOW}--> Starting CNCjs under PM2...${NC}"
+CNCJS_BIN="$(command -v cncjs)"
+if [[ -z "${CNCJS_BIN}" ]]; then
+  echo -e "${RED}Error: cncjs binary not found in PATH.${NC}"
+  exit 1
+fi
 
-sudo -u "$REAL_USER" PM2_HOME="$USER_HOME/.pm2" pm2 save
+# Remove old app name if exists
+sudo -u "${REAL_USER}" PM2_HOME="${USER_HOME}/.pm2" pm2 delete "${APP_NAME}" 2>/dev/null || true
+sudo -u "${REAL_USER}" PM2_HOME="${USER_HOME}/.pm2" pm2 start "${CNCJS_BIN}" \
+  --name "${APP_NAME}" \
+  -- --config "${CONFIG_JSON}"
 
-echo -e "${GREEN}=== [UniversalBit] Automated Deployment Complete ===${NC}"
-echo -e "Access your interface safely via: ${YELLOW}https://localhost:8443${NC}"
-echo -e "Or use your server hostname/IP on port ${YELLOW}8443${NC}"
+sudo -u "${REAL_USER}" PM2_HOME="${USER_HOME}/.pm2" pm2 save
+
+echo -e "${GREEN}=== Deployment complete ===${NC}"
+echo -e "CNCjs internal:  http://${CNCJS_HOST}:${INTERNAL_PORT} (loopback intended)"
+echo -e "CNCjs secure UI: https://localhost:${PUBLIC_TLS_PORT}"
+echo -e ""
+echo -e "Useful checks:"
+echo -e "  pm2 list"
+echo -e "  pm2 logs ${APP_NAME} --lines 100"
+echo -e "  ss -ltnp | grep ${PUBLIC_TLS_PORT}"
