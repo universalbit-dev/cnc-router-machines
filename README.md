@@ -18,8 +18,6 @@ It includes:
 - Wiring and toolchain references
 - Real-world flash workflows
 
-![CNC Machine](https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/universalbit_cnc_project.png)
-
 ---
 
 ## 📌 Table of Contents
@@ -149,6 +147,10 @@ sudo ./universalbit_grbl_flasher.sh \
 ```
 
 ---
+![ESP32](https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/esp32_firmware.png
+)
+
+
 
 ### 🔹 ESP32 (recommended script flow)
 
