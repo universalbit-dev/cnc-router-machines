@@ -113,7 +113,8 @@ Before flashing:
 - confirm serial port exists (`/dev/ttyUSB*` or `/dev/ttyACM*`)
 
 ---
-
+![Arduino Nano Compatible](https://img.shields.io/badge/Arduino_Nano-Compatible-lightgrey?style=flat-square&logo=arduino)
+![Arduino Uno Compatible](https://img.shields.io/badge/Arduino_Uno-Compatible-lightgrey?style=flat-square&logo=arduino)
 ### 🔹 Arduino Uno / Nano (AVR)
 
 ```bash
@@ -125,7 +126,7 @@ sudo ./universalbit_grbl_flasher.sh --chip avr --port /dev/ttyUSB0 --yes
 ```
 
 ---
-
+![ESP8266 Compatible](https://img.shields.io/badge/ESP8266-Compatible-lightgrey?style=flat-square&logo=espressif)
 ### 🔹 ESP8266
 ## Build + flash (recommended)
 ```
@@ -147,11 +148,8 @@ sudo ./universalbit_grbl_flasher.sh \
 ```
 
 ---
-![ESP32](https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/esp32_firmware.png
-)
 
-
-
+![ESP32 Tested](https://img.shields.io/badge/ESP32-Tested-brightgreen?style=flat-square&logo=espressif)
 ### 🔹 ESP32 (recommended script flow)
 
 This is the recommended and tested flow.
@@ -163,7 +161,8 @@ sudo ./universalbit_grbl_flasher.sh --chip esp32 --build-esp32-from-source --esp
 # Flash existing binary
 sudo ./universalbit_grbl_flasher.sh --chip esp32 --bin "$HOME/Grbl_Esp32/.pio/build/release/firmware.bin" --yes
 ```
-
+![ESP32](https://github.com/universalbit-dev/cnc-router-machines/blob/main/assets/images/esp32_firmware.png
+)
 ---
 
 ### 🔹 ESP32 (manual esptool flow)
