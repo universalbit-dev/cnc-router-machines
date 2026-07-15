@@ -79,28 +79,6 @@ http://localhost:8000/#/workspace
 ./unbt_cncjs.sh --restart
 ./unbt_cncjs.sh --logs
 ```
-
-## 🛡️ Troubleshooting: Permission Denied on Serial Port (`/dev/ttyUSB0`)
-
-If your background simulator daemon log throws a `Permission denied, cannot open /dev/ttyUSB0` error, the process engine does not have clearance to access the serial hardware.
-
-### Secure Fix: Propagate Linux Group Permissions
-
-Run the following commands to permanently add your active user account to the system hardware access group and force your background processes to reload their environment profiles:
-
-```bash
-# 1. Add your dynamic user account to the serial dialout group
-sudo usermod -aG dialout $USER
-# 2. Stop your active CNCjs instance session
-./unbt_cncjs.sh --stop
-# 3. Kill your background process manager engine to completely drop old permission locks
-pm2 kill || true
-# 4. Restart the runtime control engine under your updated profile layout
-./unbt_cncjs.sh --start
-
-```
-
----
 ## 🚀 Firmware Deployment Usage
 
 Main tool:
@@ -195,8 +173,13 @@ sudo esptool --chip esp32 --no-stub --port /dev/ttyUSB0 --baud 115200 \
 
 > Note: In `--no-stub` mode, `erase-flash` may fail on some ESP32 ROM loaders.  
 > `write-flash` already erases the target range it writes.
-
 ---
+
+## 🛡️ Troubleshooting
+
+If you run into issues like **`Permission denied` on `/dev/ttyUSB0`**, missing serial ports, or ESP32 hardware reset loops, check our dedicated troubleshooting guide. It covers the complete fixes for Linux kernel drivers, braille service hijackers (`brltty`), and PM2 background daemon permissions.
+
+👉 **[ESP32 Troubleshooting](https://github.com/universalbit-dev/cnc-router-machines/blob/main/docs/troubleshooting-esp32.md)**
 
 ## 🔌 Hardware Wiring Guides
 
